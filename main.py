@@ -5,6 +5,7 @@ Created on Sun Mar 10 20:07:36 2019
 @author: wanda
 """
 import urllib.request, urllib.parse, urllib.error
+from selenium import webdriver
 from bs4 import BeautifulSoup
 import ssl
 import re
@@ -30,4 +31,22 @@ for l in links:
     if re.match('https://millercenter.org/the-presidency/presidential-speeches/.+',l):
         speech_links.append(l)
 #print(links)       
-print(speech_links)
+#print(speech_links)
+
+#get the speed in string
+def getSpeech(link):
+    driver=webdriver.Chrome()
+    driver.get(link)
+    elem=driver.find_element_by_class_name("expandable-text-trigger")
+    elem.click()
+    elems=driver.find_element_by_class_name("transcript-inner")
+    text=elems.text
+    driver.close()
+    return text
+                                    
+    
+speeches=[]
+for link in speech_links:
+    speeches.append(getSpeech(link))
+     
+print(speeches[0])
